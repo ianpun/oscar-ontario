@@ -1,0 +1,34 @@
+https://oscaremr.atlassian.net/wiki/spaces/OS/pages/424312833/Current+OSCAR+EMR+19+Installation+Draft
+
+timedatectl set-ntp yes
+timedatectl set-timezone  America/Toronto
+
+
+sudo add-apt-repository universe
+sudo apt update
+sudo apt upgrade 
+
+sudo apt install certbot
+
+sudo certbot certonly --standalone -d DOMAINNAME
+
+sudo ls /etc/letsencrypt/live/DOMAINNAME
+
+
+sudo apt install openjdk-11-jre-headless
+ java -version
+sudo apt install wkhtmltopdf
+
+wkhtmltopdf -s Letter -T 10mm -L 8mm -R 8mm --print-media-type --disable-smart-shrinking --enable-local-file-access http://worldoscar.org test.pdf
+
+
+sudo apt install mariadb-server mariadb-client libmariadb-java
+
+sudo mysql_secure_installation
+
+sudo mysql -uroot -pMYSQLPASSWORD oscar_15 -A;
+
+ALTER USER root@localhost IDENTIFIED VIA mysql_native_password; 
+
+SET PASSWORD = PASSWORD('MYSQLPASSWORD');
+
