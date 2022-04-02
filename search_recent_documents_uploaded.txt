@@ -1,0 +1,66 @@
+<report title="Search documents recently uploaded" description="Searches document name<BR>By Ian Pun MD  2022-03-25   " active="1">
+<query>
+SELECT
+
+CONCAT( "<a target='_blank'
+href=../../dms/ManageDocument.do?method=display&doc_no=",
+d.document_no, ">" ,
+d.document_no, "<a/>" ) As "view",
+
+CONCAT( "<a target='_blank'
+href=../../dms/editDocument.jsp?editDocumentNo=",
+d.document_no, ">edit<a/>" ) As "edit",
+
+
+
+CONCAT( "<a target='_blank' href=../../demographic/demographiccontrol.jsp?demographic_no=",
+dm.demographic_no, "&displaymode=edit&dboperation=search_detail>" ,
+dm.demographic_no, "<a/>" ) As "Dem#",
+
+CONCAT( "<a  target='_blank' href=../../oscarEncounter/IncomingEncounter.do?appointmentNo=&demographicNo=",dm.demographic_no,"&curProviderNo=&reason=Tel-Progress+Note&encType=&curDate=&appointmentDate=&startTime=&status=>eChart<a/>" ) AS "eChart" ,
+
+
+
+ d.docdesc As "Doc_descripton",
+  d.observationdate as "Date",
+  d.doccreator as "Creator",
+ dm.last_name "Last",
+ dm.first_name "First",
+ CONCAT(dm.year_of_birth,'-',dm.month_of_birth,'-',dm.date_of_birth) AS "DOB",
+ dm.sex AS "G",
+ dm.hin,
+ dm.phone,
+ CONCAT( "<a href=mailto:", dm.email, ">" ,dm.email, "<a/>" ) as "emailto",
+ dm.phone2,
+ dm.address,
+ CONCAT(dm.city," ",dm.postal) as citypostal
+
+FROM demographic dm, document d, ctl_document cd
+WHERE
+   dm.demographic_no = cd.module_id
+AND
+  d.document_no = cd.document_no
+AND
+ (d.docfilename LIKE REPLACE("%{docname}%"," ","%")
+OR
+  d.docdesc LIKE REPLACE("%{docname}%"," ","%")   )
+Order by d.document_no desc {limitnumresult};
+</query>
+
+
+
+ <param id="docname" type="text" description="Enter name of document to search">%
+</param> 
+
+<param id="limitnumresult" type="list" description="Number of results:">
+     <choice id="limit 100">100</choice>
+     <choice id="limit 10">10</choice>
+     <choice id="limit 500">500</choice>
+     <choice id="limit 1000">1000</choice>
+     <choice id="">ALL</choice>
+
+</param>
+
+
+
+</report>
