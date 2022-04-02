@@ -1,0 +1,69 @@
+<report title="Search vaccine ticklers" description="Searches ticklers for number of vaccines needed<BR>By Ian Pun MD  2022-03-27   " active="1">
+
+
+<query>
+
+
+
+select "Gardasil" as name, count(*) from  (
+select  d.last_name, d.first_name, a.task_assigned_to , a.service_date , a.message from tickler a, demographic d where (a.message REGEXP 'gardasil') and a.demographic_no = d.demographic_no and date(a.service_date)  >= CURDATE()  and date(a.service_date) <=  DATE_ADD(CURDATE(), {TIMEINTERVAL})
+ order by a.service_date ) as t1
+
+union
+
+select "Engerix" as name, count(*) from  (
+select  d.last_name, d.first_name, a.task_assigned_to , a.service_date , a.message from tickler a, demographic d where (a.message REGEXP 'engerix') and a.demographic_no = d.demographic_no and date(a.service_date)  >= CURDATE()  and date(a.service_date) <=  DATE_ADD(CURDATE(), {TIMEINTERVAL})
+ order by a.service_date ) as t2
+
+union
+
+select "Shingrix" as name, count(*) from  (
+select  d.last_name, d.first_name, a.task_assigned_to , a.service_date , a.message from tickler a, demographic d where (a.message REGEXP 'shingr') and a.demographic_no = d.demographic_no and date(a.service_date)  >= CURDATE()  and date(a.service_date) <=  DATE_ADD(CURDATE(), {TIMEINTERVAL})
+ order by a.service_date ) as t3
+
+union
+
+select "Havrix" as name, count(*) from  (
+select  d.last_name, d.first_name, a.task_assigned_to , a.service_date , a.message from tickler a, demographic d where (a.message REGEXP 'Havri') and a.demographic_no = d.demographic_no and date(a.service_date)  >= CURDATE()  and date(a.service_date) <=  DATE_ADD(CURDATE(), {TIMEINTERVAL})
+ order by a.service_date ) as t4
+
+
+union
+
+select "Prevnar" as name, count(*) from  (
+select  d.last_name, d.first_name, a.task_assigned_to , a.service_date , a.message from tickler a, demographic d where (a.message REGEXP 'Prevn') and a.demographic_no = d.demographic_no and date(a.service_date)  >= CURDATE()  and date(a.service_date) <=  DATE_ADD(CURDATE(), {TIMEINTERVAL})
+ order by a.service_date ) as t5
+
+union
+
+select "Trumenba" as name, count(*) from  (
+select  d.last_name, d.first_name, a.task_assigned_to , a.service_date , a.message from tickler a, demographic d where (a.message REGEXP 'Trumen') and a.demographic_no = d.demographic_no and date(a.service_date)  >= CURDATE()  and date(a.service_date) <=  DATE_ADD(CURDATE(), {TIMEINTERVAL})
+ order by a.service_date ) as t6
+
+
+union
+
+select "Twinrix" as name, count(*) from  (
+select  d.last_name, d.first_name, a.task_assigned_to , a.service_date , a.message from tickler a, demographic d where (a.message REGEXP 'Twinr') and a.demographic_no = d.demographic_no and date(a.service_date)  >= CURDATE()  and date(a.service_date) <=  DATE_ADD(CURDATE(), {TIMEINTERVAL})
+ order by a.service_date ) as t7
+
+
+
+
+</query>
+
+
+
+
+<param id="TIMEINTERVAL" type="list" description="Time to search:">
+     <choice id="interval 1 month">1 months later</choice>
+     <choice id="interval 3 month">3 months later</choice>
+     <choice id="interval 6 month">6 months later </choice>
+     <choice id="interval 12 month">12 months later</choice>
+     <choice id="">ALL</choice>
+
+</param>
+
+
+
+</report>
