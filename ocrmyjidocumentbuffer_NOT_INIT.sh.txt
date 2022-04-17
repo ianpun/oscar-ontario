@@ -1,0 +1,50 @@
+#!/bin/bash
+#ocrmyjidocumentbuffer.sh
+#
+#By Ian Pun March 2022 to ocrmypdf then pdfmytext in local FILES directory
+#
+# copies pdf to remote server directory ~/OCRfile where the ocrmypdf and pdfmytext is contained
+# ocrmypdf and pdfmytext those processes files on remote server
+# and copies back to local OCR_FILES directory . A subdirectory OCR_FILES/txt stores the scraped text of the pdf
+#
+# forceocrflag - will force OCR on rerasterize pdf if set
+# issues of filenames with spaces
+#
+# local server and remote server are already tied ssh with private/public keys stored in ~/.ssh
+
+
+REMOTESERVERPORT=REMOTESSHPORTNUMBER
+REMOTEUSER="REMOTEUSER@REMOTESERVER_IP"
+
+
+#forceocrflag="--force-ocr"
+
+forceocrflag=""
+
+FILES="LOCALDIRECTORY_WHERE_PDFS_ARE"
+OCR_FILES="LOCALDIRECTORY_WHERE_PDFS_OCRED_ARE"
+
+cd $FILES
+for f in *.pdf; do
+
+    echo $f
+
+   
+   scp -P ${REMOTESERVERPORT} "${f}" ${REMOTEUSER}:"~/OCRfile"
+
+   ssh -p ${REMOTESERVERPORT} ${REMOTEUSER} "ocrmypdf  ${forceocrflag} ~/OCRfile/'${f}'  ~/OCRfile/'OCR_${f}'"
+
+   scp -P ${REMOTESERVERPORT} ${REMOTEUSER}:"~/OCRfile/'OCR_$f'" "${OCR_FILES}/${f}"
+
+
+
+   ssh -p ${REMOTESERVERPORT} ${REMOTEUSER} "pdftotext  ~/OCRfile/'OCR_${f}'  ~/OCRfile/'OCR_${f}.txt'"
+
+   scp -P ${REMOTESERVERPORT} ${REMOTEUSER}:"~/OCRfile/'OCR_${f}.txt'" "${OCR_FILES}/txt/${f}.txt"
+
+
+
+done
+
+cd
+
