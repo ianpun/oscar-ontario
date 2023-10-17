@@ -2,7 +2,7 @@ import mysql.connector
 import re
 
 # Initialize database connection
-conn = mysql.connector.connect(host='127.0.0.1', port=3306, user='root', password='mac2009', database='oscar_mcmaster')
+conn = mysql.connector.connect(host='127.0.0.1', port=3306, user='root', password='PW', database='oscar_mcmaster')
 cursor = conn.cursor()
 
 try:
