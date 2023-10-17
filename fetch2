@@ -1,0 +1,46 @@
+import mysql.connector
+import re
+
+# Initialize database connection
+conn = mysql.connector.connect(host='127.0.0.1', port=3306, user='root', password='mac2009', database='oscar_mcmaster')
+cursor = conn.cursor()
+
+try:
+    # List of parameters to look for
+    parameters = ['BP', 'WT', 'HT']
+
+    # Create a regex pattern to match ##<parameter> <value>
+    regex_pattern = '|'.join(['##{} (\S+)'.format(param) for param in parameters])
+
+    # Step 1: Find relevant notes containing "##<parameter>" in casemgmt_note.note field
+    like_conditions = " OR ".join(["note LIKE '%##{}%'".format(param) for param in parameters])
+    cursor.execute("SELECT note_id, note, demographic_no, provider_no, observation_date, update_date FROM casemgmt_note WHERE {}".format(like_conditions))
+    records = cursor.fetchall()
+
+    for record in records:
+        note_id, note, demographic_no, provider_no, observation_date, update_date = record
+
+        # Extract parameter values using regular expression
+        for match in re.finditer(regex_pattern, note):
+            param_type = match.group().split()[0][2:]  # Remove '##'
+            param_value = match.group().split()[1]
+            
+            # Check for duplicate records
+            cursor.execute("SELECT COUNT(*) FROM measurements WHERE type=%s AND demographicNo=%s AND providerNo=%s AND dataField=%s AND dateObserved=%s",
+                           (param_type, demographic_no, provider_no, param_value, observation_date))
+            count = cursor.fetchone()[0]
+
+            if count == 0:
+                # Insert new records into the measurements table
+                
+                print(u"{} {}".format(demographic_no, param_value))   
+                print(u"%s , %s , %s , %s , %s , %s" % (param_type, demographic_no, provider_no, param_value, observation_date, update_date))
+ 
+
+                
+    # Commit the changes
+    conn.commit()
+
+finally:
+    cursor.close()
+    conn.close()
