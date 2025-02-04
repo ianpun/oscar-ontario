@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload</title>
+</head>
+<body>
+    <h1>TAKE A PHOTO FROM PHONE CAMERA</h1>
+    <form method="post" enctype="multipart/form-data">
+        <input type="file" name="file" accept="image/*" capture="camera">
+        <input type="submit" value="Upload">
+    </form>
+    <h1>Upload a JPG file from Photo folder</h1>
+    <form method="post" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".jpg">
+        <input type="submit" value="Upload">
+    </form>
+</body>
+</html>
