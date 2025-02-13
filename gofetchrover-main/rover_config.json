@@ -1,0 +1,14 @@
+{
+    "base_url": "https://api.ontest.excelleris.com/",
+    "user_id": "your_userid",
+    "password": "your_password",
+    "client_cert_path": "client_certificate.pem",
+    "root_cert_path": "root_certificate.pem",
+    "client_key_path": "client_key.pem",
+    "incoming_xml_folder_path" : "xml/",
+    "incoming_HL7_folder_path" : "incomingHL7/",
+    "incomingMuleFolder" : "lifelabs/",
+    "app_name" : "GoFetchRover",
+    "app_version" : "1.0.0-alpha",
+    "mule_log_file" : "mule.log"
+}
